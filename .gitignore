@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# uv / venv
+.venv/
+
+# generated
+build/
+
+# editors
+.vscode/
+.idea/
