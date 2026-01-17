@@ -1,0 +1,11 @@
+[project]
+name = "pic-template"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "gdsfactory>=9.31.0",
+    "pydantic>=2.12.5",
+    "pyyaml>=6.0.3",
+]
