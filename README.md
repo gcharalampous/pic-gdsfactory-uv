@@ -1,6 +1,6 @@
 # PIC Template
 
-![CI](https://github.com/georgios/pic-gdsfactory-uv/workflows/CI/badge.svg)
+![CI](https://github.com/gcharalampous/pic-gdsfactory-uv/workflows/CI/badge.svg)
 
 A Python-based template for designing Photonic Integrated Circuits (PICs) using **gdsfactory**.
 
