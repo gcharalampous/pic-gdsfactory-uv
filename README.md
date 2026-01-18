@@ -47,6 +47,9 @@ make drc
 
 # Run DRC and open violations in KLayout
 make drc-gui
+
+# Print geometry check results as JSON
+make geometry
 ```
 
 ### Available Make Commands
@@ -59,6 +62,9 @@ make test       # Run unit tests
 make lint       # Check code quality with ruff
 make drc        # Run design rule check (requires klayout)
 make drc-gui    # Run DRC and open report in KLayout
+make verify     # Run comprehensive verification (DRC + geometry)
+make verify-enhanced # Run verification with enhanced DRC rules
+make geometry   # Print geometry check results as JSON
 make clean      # Remove all generated files
 make help       # Show all available targets
 ```

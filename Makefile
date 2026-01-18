@@ -33,6 +33,15 @@ drc: ## Run design rule check (OPEN=1 to open KLayout on violations)
 drc-gui: ## Run design rule check with GUI
 	OPEN=1 $(MAKE) drc
 
+verify: ## Run comprehensive verification flow (DRC + geometry)
+	$(PY) -m pic_template.flows.verify
+
+verify-enhanced: ## Run verification with enhanced DRC rules
+	$(PY) -m pic_template.flows.verify --enhanced
+
+geometry: ## Print geometry check results as JSON
+	$(PY) -c "import json; from pic_template.flows.geometry_check import GeometryChecker; from pic_template.chips.top import top; print(json.dumps(GeometryChecker(top()).run_all_checks(is_top_level=True), indent=2))"
+
 help:
 	@echo ""
 	@echo "Available targets:"
