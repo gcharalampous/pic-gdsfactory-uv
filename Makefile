@@ -18,7 +18,6 @@ lint: ## Lint source code
 
 
 build: ## Export GDS files
-	mkdir -p $(GDS_DIR)
 	$(PY) scripts/build_top.py
 
 show: ## Open interactive viewer for top()
