@@ -1,0 +1,24 @@
+# Standalone sanity DRC (NOT foundry accurate)
+
+raise "Missing -rd input=..."  unless defined?($input)  && $input
+raise "Missing -rd report=..." unless defined?($report) && $report
+
+log_file($log) if defined?($log) && $log
+verbose(true)
+info("Starting sanity DRC")
+
+# Load input explicitly (standalone engine mode)
+source($input)
+
+# Write report explicitly to the file path passed from CLI
+report("Sanity DRC", $report)
+
+wg = input(1, 0)
+
+w_viol = wg.width(0.45.um)
+w_viol.output("wg_width")
+log("Width violation markers: #{w_viol.data.size}")
+
+s_viol = wg.space(0.3.um)
+s_viol.output("wg_space")
+log("Space violation markers: #{s_viol.data.size}")

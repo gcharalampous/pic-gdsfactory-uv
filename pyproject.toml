@@ -1,7 +1,7 @@
 [project]
 name = "pic-template"
 version = "0.1.0"
-description = "Add your description here"
+description = "A template for designing Photonic Integrated Circuits (PICs) using gdsfactory"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

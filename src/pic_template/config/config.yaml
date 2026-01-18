@@ -1,0 +1,34 @@
+# PIC Template Configuration
+# Update these paths for your specific project/foundry
+
+# Project metadata
+project:
+  name: "PIC Template"
+  description: "Photonic Integrated Circuit design"
+
+# Build and output directories
+build:
+  gds_dir: "build/gds"
+  reports_dir: "build/reports"
+  screenshots_dir: "build/screenshots"
+
+# GDS files
+gds:
+  top: "build/gds/top.gds"  # Main design GDS file
+
+# DRC (Design Rule Check) configuration
+drc:
+  rules: "klayout/drc_simple_test.drc"  # DRC rule file
+  report: "build/reports/drc_report.lyrdb"  # Output report file
+  log: "build/reports/drc_run.log"  # Execution log
+  summary_script: "klayout/print_drc_report.rb"  # Optional summary script
+  fail_on_violations: false  # Set to true for CI/CD pipelines
+
+# Simulation/verification scripts (extensible)
+verification:
+  scripts_dir: "klayout"
+
+# Layer stack and technology (extensible)
+technology:
+  pdk_name: "generic_silicon_photonics"
+  layers_file: "src/pic_template/pdk/layers.py"
