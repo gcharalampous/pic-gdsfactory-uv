@@ -29,6 +29,17 @@ cd pic-gdsfactory-uv
 make setup
 ```
 
+Then initialize your project (rename from template):
+```bash
+make init
+# or: python scripts/init.py
+# Follow prompts to name your project (e.g., "my_photonic_design")
+# The script will:
+#   ✓ Rename pic_template → your_project_name throughout
+#   ✓ Update all imports and config files
+#   ✓ Initialize a clean git repository
+```
+
 This project uses `uv` for fast, reliable dependency management and is configured with the `uv_build` backend.
 
 ## Quick Start
@@ -56,6 +67,7 @@ make geometry
 
 ```bash
 make setup      # Install/sync environment from lockfile
+make init       # Initialize project (rename from template)
 make build      # Export GDS files to build/gds/
 make show       # Open interactive viewer for top() design
 make test       # Run unit tests

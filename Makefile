@@ -10,6 +10,9 @@ GDS_DIR:= $(BUILD_DIR)/gds
 setup: ## Install/sync environment from lockfile
 	uv sync
 
+init: ## Initialize project (rename from template)
+	$(PY) scripts/init.py
+
 test: ## Run smoke tests
 	uv run pytest -q
 
