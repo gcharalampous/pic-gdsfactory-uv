@@ -1,29 +1,28 @@
 from __future__ import annotations
 import gdsfactory as gf
-from pic_template.components.rings import ring_racetrack
-from pic_template.components.straight import straight_waveguide
+from pic_template.circuits import wdm_filter, waveguide_array
 from pic_template.pdk.layers import LAYER
 
 @gf.cell
 def top() -> gf.Component:
+    """Top-level photonic integrated circuit.
+    
+    Demonstrates use of circuit building blocks:
+    - WDM filter with 4 wavelength channels
+    - Waveguide array for multi-channel distribution
+    """
     c = gf.Component("TOP")
 
-    # Create a 3x2 array of ring racetracks with manual placement
-    ring = ring_racetrack()
-    spacing_x = 200
-    spacing_y = 150
+    # Create WDM filter as main signal processing block
+    wdm = c << wdm_filter(n_channels=4)
+    wdm.movex(50)
     
-    for i in range(3):  # columns
-        for j in range(2):  # rows
-            r = c << ring
-            r.move((i * spacing_x, j * spacing_y))
-
-    # Add a straight waveguide below as an example of a simple component
-    straight = c << straight_waveguide(length=500)
-    straight.movey(c.ymin - 100)
-
+    # Add waveguide array as output distribution
+    array = c << waveguide_array(n_channels=4, spacing=50.0)
+    array.movex(300)
+    
     # Add label
-    label = c << gf.components.text("PIC TEMPLATE", size=20, layer=LAYER.TEXT)
+    label = c << gf.components.text("PIC TEMPLATE v2", size=20, layer=LAYER.TEXT)
     label.move((c.xmin, c.ymax + 50))
 
     return c

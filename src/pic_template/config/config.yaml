@@ -3,7 +3,7 @@
 
 # Project metadata
 project:
-  name: "PIC Template"
+  name: "pic__template"
   description: "Photonic Integrated Circuit design"
 
 # Build and output directories
@@ -14,11 +14,13 @@ build:
 
 # GDS files
 gds:
-  top: "build/gds/top.gds"  # Main design GDS file
+  top_cell: "top"
+  filename: "{project.name}.gds"
 
 # DRC (Design Rule Check) configuration
 drc:
   rules: "klayout/drc_simple_test.drc"  # DRC rule file
+  enhanced_rules: "klayout/drc_enhanced.drc"  # Enhanced DRC rules
   report: "build/reports/drc_report.lyrdb"  # Output report file
   log: "build/reports/drc_run.log"  # Execution log
   summary_script: "klayout/print_drc_report.rb"  # Optional summary script
@@ -27,6 +29,7 @@ drc:
 # Simulation/verification scripts (extensible)
 verification:
   scripts_dir: "klayout"
+  geometry_checks: true  # Enable Python geometry validation
 
 # Layer stack and technology (extensible)
 technology:

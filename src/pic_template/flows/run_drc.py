@@ -8,8 +8,12 @@ from pic_template.config import get_config
 config = get_config()
 drc_config = config["drc"]
 gds_config = config["gds"]
+build_config = config["build"]
 
-GDS = Path(gds_config["top"]).resolve()
+# Construct GDS path from build and gds config
+gds_dir = build_config["gds_dir"]
+gds_filename = gds_config["filename"]
+GDS = (Path(gds_dir) / gds_filename).resolve()
 RULES = Path(drc_config["rules"]).resolve()
 REPORT = Path(drc_config["report"]).resolve()
 LOG = Path(drc_config["log"]).resolve()

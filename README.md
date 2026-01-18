@@ -1,5 +1,7 @@
 # PIC Template
 
+![CI](https://github.com/georgios/pic-gdsfactory-uv/workflows/CI/badge.svg)
+
 A Python-based template for designing Photonic Integrated Circuits (PICs) using **gdsfactory**.
 
 ## Overview
@@ -127,6 +129,30 @@ A simple interconnect waveguide - the minimal component structure to copy when c
 
 Both include detailed docstrings explaining the physics and typical parameter ranges.
 
+## CI/CD Automation
+
+The project includes a GitHub Actions CI workflow (`.github/workflows/ci.yml`) that automatically:
+- Runs all tests (pytest)
+- Builds GDS files
+- Performs enhanced DRC verification
+
+### Local Testing
+
+Run CI checks locally before pushing:
+```bash
+# Run all tests
+uv run pytest
+
+# Build GDS
+uv run python scripts/build_top.py
+
+# Run verification (DRC + geometry checks)
+uv run python -m pic_template.flows.verify
+
+# View verification report
+cat build/reports/verification_summary.txt
+```
+
 ## Dependencies
 
 - **gdsfactory** - Photonic CAD framework
@@ -137,7 +163,11 @@ See `pyproject.toml` for full dependency list.
 
 ## Documentation
 
-For detailed guides on advanced topics, see the `docs/` directory (extensible).
+Comprehensive guides for getting started and designing circuits:
+
+- **[SETUP.md](docs/SETUP.md)** - Installation, project structure, key commands
+- **[COMPONENTS.md](docs/COMPONENTS.md)** - Design and use photonic components, component API
+- **[WORKFLOW.md](docs/WORKFLOW.md)** - Step-by-step design workflow, examples, optimization
 
 ## Contributing
 

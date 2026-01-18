@@ -1,0 +1,150 @@
+# Enhanced DRC Rules for Silicon Photonics
+# This is a comprehensive DRC ruleset for photonic integrated circuits
+# These rules are examples - ALWAYS verify with your foundry's actual PDK
+
+raise "Missing -rd input=..."  unless defined?($input)  && $input
+raise "Missing -rd report=..." unless defined?($report) && $report
+
+log_file($log) if defined?($log) && $log
+verbose(true)
+info("Starting Enhanced PIC DRC")
+
+# Load input GDS
+source($input)
+
+# Write report to specified path
+report("Enhanced PIC DRC", $report)
+
+# ============================================================================
+# Layer Definitions (matching your PDK layers.py)
+# ============================================================================
+WG        = input(1, 0)      # Silicon waveguide core
+SLAB150   = input(2, 0)      # Shallow slab
+SLAB90    = input(3, 0)      # Very shallow slab
+DEEPTRENCH = input(4, 0)     # Deep trenches
+N_DOPING  = input(20, 0)     # N-type doping
+P_DOPING  = input(21, 0)     # P-type doping
+NPP       = input(24, 0)     # N++ doping
+M1        = input(50, 0)     # Metal 1
+M2        = input(51, 0)     # Metal 2
+VIA1      = input(52, 0)     # Via between M1 and M2
+
+# ============================================================================
+# Waveguide Rules (WG layer)
+# ============================================================================
+info("Checking waveguide rules...")
+
+# WG.1: Minimum waveguide width (typically 0.4-0.5 µm for single-mode)
+wg_width_viol = WG.width(0.45.um, angle_limit(80))
+wg_width_viol.output("WG.1", "Waveguide width < 0.45 µm")
+
+# WG.2: Waveguide spacing (prevent coupling between unintended guides)
+wg_space_viol = WG.space(0.3.um, euclidian)
+wg_space_viol.output("WG.2", "Waveguide spacing < 0.3 µm")
+
+# WG.3: Waveguide enclosed by slab (rib waveguides must have slab)
+# This is commented as it depends on design style
+# wg_not_in_slab = WG.not_inside(SLAB150)
+# wg_not_in_slab.output("WG.3", "Waveguide not enclosed by slab")
+
+# WG.4: Minimum waveguide area (prevent tiny fragments)
+wg_area_viol = WG.with_area(nil, 0.2.um2)
+wg_area_viol.output("WG.4", "Waveguide area < 0.2 µm²")
+
+# ============================================================================
+# Slab Rules
+# ============================================================================
+info("Checking slab rules...")
+
+# SLAB.1: Minimum slab width
+if SLAB150
+  slab_width_viol = SLAB150.width(1.0.um)
+  slab_width_viol.output("SLAB.1", "Slab width < 1.0 µm")
+  
+  # SLAB.2: Slab spacing
+  slab_space_viol = SLAB150.space(0.5.um)
+  slab_space_viol.output("SLAB.2", "Slab spacing < 0.5 µm")
+end
+
+# ============================================================================
+# Doping Rules (for modulators/detectors)
+# ============================================================================
+info("Checking doping rules...")
+
+if N_DOPING && P_DOPING
+  # DOP.1: N and P doping must not overlap
+  np_overlap = N_DOPING & P_DOPING
+  np_overlap.output("DOP.1", "N and P doping overlap")
+  
+  # DOP.2: Minimum spacing between N and P doping
+  np_space_viol = N_DOPING.separation(P_DOPING, 0.5.um)
+  np_space_viol.output("DOP.2", "N-P doping spacing < 0.5 µm")
+end
+
+if NPP
+  # DOP.3: N++ width check
+  npp_width_viol = NPP.width(0.3.um)
+  npp_width_viol.output("DOP.3", "N++ width < 0.3 µm")
+end
+
+# ============================================================================
+# Metal Rules
+# ============================================================================
+info("Checking metal rules...")
+
+if M1
+  # M1.1: Minimum metal width
+  m1_width_viol = M1.width(1.0.um)
+  m1_width_viol.output("M1.1", "M1 width < 1.0 µm")
+  
+  # M1.2: Minimum metal spacing
+  m1_space_viol = M1.space(1.5.um)
+  m1_space_viol.output("M1.2", "M1 spacing < 1.5 µm")
+  
+  # M1.3: Minimum area
+  m1_area_viol = M1.with_area(nil, 2.0.um2)
+  m1_area_viol.output("M1.3", "M1 area < 2.0 µm²")
+end
+
+if M2
+  # M2.1: Minimum metal width
+  m2_width_viol = M2.width(1.0.um)
+  m2_width_viol.output("M2.1", "M2 width < 1.0 µm")
+  
+  # M2.2: Minimum metal spacing
+  m2_space_viol = M2.space(1.5.um)
+  m2_space_viol.output("M2.2", "M2 spacing < 1.5 µm")
+end
+
+# ============================================================================
+# Via Rules
+# ============================================================================
+info("Checking via rules...")
+
+if VIA1 && M1 && M2
+  # VIA.1: Via must be enclosed by both metal layers
+  via_not_in_m1 = VIA1.not_inside(M1)
+  via_not_in_m1.output("VIA.1a", "Via not enclosed by M1")
+  
+  via_not_in_m2 = VIA1.not_inside(M2)
+  via_not_in_m2.output("VIA.1b", "Via not enclosed by M2")
+  
+  # VIA.2: Minimum enclosure of via by metal
+  via_m1_enc_viol = M1.enclosing(VIA1, 0.2.um)
+  via_m1_enc_viol.output("VIA.2a", "M1 enclosure of via < 0.2 µm")
+  
+  via_m2_enc_viol = M2.enclosing(VIA1, 0.2.um)
+  via_m2_enc_viol.output("VIA.2b", "M2 enclosure of via < 0.2 µm")
+end
+
+# ============================================================================
+# Density Rules (optional, for CMP - Chemical Mechanical Polishing)
+# ============================================================================
+# info("Checking density rules...")
+# These would check minimum and maximum density in windows
+# Commented out as they're process-specific and computationally intensive
+
+# ============================================================================
+# Summary
+# ============================================================================
+info("DRC complete - see report for violations")

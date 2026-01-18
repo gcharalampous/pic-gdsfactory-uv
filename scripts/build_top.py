@@ -9,7 +9,9 @@ gf.gpdk.PDK.activate()
 
 def main() -> None:
     config = get_config()
-    gds_path = Path(config["gds"]["top"])
+    gds_dir = config["build"]["gds_dir"]
+    gds_filename = config["gds"]["filename"]
+    gds_path = Path(gds_dir) / gds_filename
     gds_path.parent.mkdir(parents=True, exist_ok=True)
     
     c = top()

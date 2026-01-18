@@ -35,6 +35,12 @@ def load_config(config_file: Path = None) -> dict:
     with open(config_file) as f:
         config = yaml.safe_load(f)
     
+    # Process template variables (e.g., {project.name})
+    project_name = config.get("project", {}).get("name", "pic_template")
+    config_str = yaml.dump(config)
+    config_str = config_str.replace("{project.name}", project_name)
+    config = yaml.safe_load(config_str)
+    
     return config
 
 
