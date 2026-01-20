@@ -235,10 +235,10 @@ def main():
     print("=" * 70)
     print(f"\nYour project '{new_name}' is ready for development.")
     print("\nNext steps:")
-    print(f"  1. Update README.md with your project description")
+    print("  1. Update README.md with your project description")
     print(f"  2. Review and customize src/{new_name}/ components")
-    print(f"  3. Start designing: make build && make verify")
-    print(f"  4. Push to your repository")
+    print("  3. Start designing: make build && make verify")
+    print("  4. Push to your repository")
     print("\n")
 
 
